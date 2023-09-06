@@ -1,14 +1,15 @@
+/* eslint-disable react/prop-types */
 import { createContext, useState } from "react";
 
 // Crea el contexto
 export const CartContext = createContext();
 
 // Crea el provider
-// eslint-disable-next-line react/prop-types
+
 export function CartProvider ({ children }) {
     const [cart, setCart] = useState([])
 
-    // eslint-disable-next-line no-unused-vars
+    
     const addToCart = product => {
         //Verifica si hay algun producto en el carrito
         const productInCartIndex = cart.findIndex(item => item.id === product.id)
@@ -30,6 +31,10 @@ export function CartProvider ({ children }) {
         ]))
     }
 
+    const removeFromCart = product => {
+        setCart(prevState => prevState.filter(item => item.id !== product.id))
+    }
+
     // Limpia el carrito
     const clearCart = () => {
         setCart([])
@@ -39,6 +44,7 @@ export function CartProvider ({ children }) {
         <CartContext.Provider value={{
             cart,
             addToCart,
+            removeFromCart,
             clearCart
         }}
         >

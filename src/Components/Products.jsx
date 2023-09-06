@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import { useCart } from '../Hooks/useCart';
 import './Products.css';
 import  { AddToCartIcon, RemoveFromCartIcon } from './icons.jsx';
+import { useCart } from '../Hooks/useCart';
 
 
 export function Products ({ products }) {
-    const { addTocart, cart } = useCart()
+    const { addToCart, removeFromCart, cart } = useCart()
 
     const checkProductInCart = product => {
         return cart.some(item => item.id === product.id)
@@ -15,7 +15,7 @@ export function Products ({ products }) {
         <main className='products'>
             <ul>
                 {products.slice(0, 10).map(product => {
-                    const isProdductInCart = checkProductInCart(product)
+                    const isProductInCart = checkProductInCart(product)
 
                     return(
                     <li key={product.id}>
@@ -27,11 +27,17 @@ export function Products ({ products }) {
                             <strong>{product.title}</strong> - ${product.price}
                         </div>
                         <div>
-                            <button onClick={() => addTocart(product)}>
+                            <button
+                             style={{ backgroundColor: isProductInCart ? 'red' : '#09f' }}  onClick={() =>{
+                                isProductInCart
+                                    ? removeFromCart(product)
+                                    : addToCart(product)
+                             }}
+                            >
                                 {
-                                    isProdductInCart
-                                        ? <RemoveFromCartIcon/>
-                                        : <AddToCartIcon/>
+                                isProductInCart
+                                    ? <RemoveFromCartIcon />
+                                    : <AddToCartIcon />
                                 }
                             </button>
                         </div>
