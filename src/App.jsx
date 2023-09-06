@@ -4,6 +4,8 @@ import { Header } from './Components/Header'
 import { Footer } from './Components/Footer'
 import { IS_DEVELOPMENT } from './config'
 import { useFilters } from './Hooks/useFilters'
+import { Cart } from './Components/Cart'
+import { CartProvider } from './Context/cartContext'
 
 /**
  * Componente principal de la aplicación.
@@ -20,11 +22,12 @@ function App() {
   const filteredProducts = filterProducts(initialProducts)
 
   return(
-    <>
+    <CartProvider>
       <Header/>
+      <Cart/>
       <Products products={filteredProducts} />
       {IS_DEVELOPMENT && <Footer/>}
-    </>
+    </CartProvider>
     
   )
 }
