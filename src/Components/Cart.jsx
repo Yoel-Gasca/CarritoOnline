@@ -3,7 +3,7 @@ import { useId } from 'react'
 import { CartIcon, ClearCartIcon } from './icons'
 import { useCart } from '../Hooks/useCart'
 
-// eslint-disable-next-line react/prop-types
+
 function CartItem ({ thumbnail, price, title, quantity, addToCart }){
   return(
     <li>
@@ -26,7 +26,7 @@ function CartItem ({ thumbnail, price, title, quantity, addToCart }){
 }
 export function Cart () {
     const cartCheckboxId = useId()
-    const { cart, clearCart } = useCart()
+    const { cart, clearCart, addToCart } = useCart()
   
     return (
       <>
@@ -38,8 +38,8 @@ export function Cart () {
         <aside className='cart'>
           <ul>
             {cart.map(product => (
-              <CartItem key={product.id} 
-              // eslint-disable-next-line no-undef
+              <CartItem 
+              key={product.id} 
               addToCart={() => addToCart(product)}
               {...product}
             />

@@ -3,7 +3,7 @@ import './Filters.css'
 import { useFilters } from '../Hooks/useFilters'
 
 // Filtra el precio por rango
-// eslint-disable-next-line react/prop-types
+
 export function Filters () {
     const { filters, setFilters } = useFilters()
     //const [minPrice, setMinPrice] = useState(0)

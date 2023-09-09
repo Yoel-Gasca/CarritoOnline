@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+
 import './Products.css';
 import  { AddToCartIcon, RemoveFromCartIcon } from './icons.jsx';
 import { useCart } from '../Hooks/useCart';

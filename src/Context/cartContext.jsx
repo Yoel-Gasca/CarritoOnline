@@ -1,54 +1,58 @@
-/* eslint-disable react/prop-types */
-import { createContext, useState } from "react";
+import { useReducer, createContext } from 'react'
+import { cartReducer, cartInitialState } from '../Reducers/cart'
 
-// Crea el contexto
-export const CartContext = createContext();
+// Creación del contexto para el carrito de compras.
+export const CartContext = createContext()
 
-// Crea el provider
+/**
+ * Hook personalizado para gestionar el estado del carrito de compras.
+ * 
+ * Utiliza useReducer para manejar el estado y las acciones del carrito.
+ * Proporciona funciones para agregar, eliminar y vaciar el carrito.
+ * 
+ * @returns {object} Un objeto que contiene el estado del carrito y funciones para interactuar con él.
+ */
+function useCartReducer () {
+  const [state, dispatch] = useReducer(cartReducer, cartInitialState)
 
-export function CartProvider ({ children }) {
-    const [cart, setCart] = useState([])
+  const addToCart = product => dispatch({
+    type: 'ADD_TO_CART',
+    payload: product
+  })
 
-    
-    const addToCart = product => {
-        //Verifica si hay algun producto en el carrito
-        const productInCartIndex = cart.findIndex(item => item.id === product.id)
+  const removeFromCart = product => dispatch({
+    type: 'REMOVE_FROM_CART',
+    payload: product
+  })
 
-        if (productInCartIndex > 0){
-            // 1- structuredClone
-            const newCart = structuredClone(cart)
-            newCart[productInCartIndex].quantity += 1
-            setCart(newCart);
-        }
+  const clearCart = () => dispatch({ type: 'CLEAR_CART' })
 
-        // En caso de que el carrito no tenga algun producto
-        setCart(prevState => ([
-            ...prevState,
-            {
-                ...product,
-                quantity: 1
-            }
-        ]))
-    }
-
-    const removeFromCart = product => {
-        setCart(prevState => prevState.filter(item => item.id !== product.id))
-    }
-
-    // Limpia el carrito
-    const clearCart = () => {
-        setCart([])
-    };
-
-    return(
-        <CartContext.Provider value={{
-            cart,
-            addToCart,
-            removeFromCart,
-            clearCart
-        }}
-        >
-            {children}
-        </CartContext.Provider>
-    )
+  return { state, addToCart, removeFromCart, clearCart }
 }
+
+/**
+ * Proveedor del contexto del carrito de compras.
+ * 
+ * Utiliza el contexto de React para proporcionar el estado del carrito y las funciones relacionadas a los componentes hijos.
+ * 
+ * @param {object} children - Los componentes hijos que deben tener acceso al contexto del carrito.
+ * @returns {JSX.Element} El componente React que proporciona el contexto del carrito.
+ */
+// la dependencia de usar React Context
+// es MÍNIMA
+export function CartProvider ({ children }) {
+  const { state, addToCart, removeFromCart, clearCart } = useCartReducer()
+
+  return (
+    <CartContext.Provider value={{
+      cart: state,
+      addToCart,
+      removeFromCart,
+      clearCart
+    }}
+    >
+      {children}
+    </CartContext.Provider>
+  )
+}
+
